@@ -1,0 +1,23 @@
+{
+  "name": "premier-electrical-group",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tailwindcss -i ./src/css/styles.css -o ./dist/css/bundle.css --minify --content='./src/**/*.html, ./src/**/*.njk, ./src/**/*.js' && eleventy",
+    "start": "concurrently \"npx tailwindcss -i ./src/css/styles.css -o ./dist/css/bundle.css --watch --content='./src/**/*.html, ./src/**/*.njk, ./src/**/*.js'\" \"eleventy --serve\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0",
+    "@tailwindcss/cli": "^4.1.5",
+    "concurrently": "^9.1.2",
+    "tailwindcss": "^4.1.5"
+  },
+  "dependencies": {
+    "aos": "^2.3.4"
+  }
+}
