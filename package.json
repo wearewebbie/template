@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tailwindcss -i ./src/css/styles.css -o ./dist/css/bundle.css --minify --content='./src/**/*.html, ./src/**/*.njk, ./src/**/*.js' && eleventy",
-    "start": "concurrently \"npx tailwindcss -i ./src/css/styles.css -o ./dist/css/bundle.css --watch --content='./src/**/*.html, ./src/**/*.njk, ./src/**/*.js'\" \"eleventy --serve\""
+    "start": "concurrently \"npx tailwindcss -i ./src/css/styles.css -o ./dist/css/bundle.css --watch --content='./src/**/*.html, ./src/**/*.njk, ./src/**/*.js'\" \"eleventy --serve\"",
+    "dev-deploy": "npm run build && node scripts.js dev",
+    "prod-deploy": "npm run build && node scripts.js prod"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +20,8 @@
     "tailwindcss": "^4.1.5"
   },
   "dependencies": {
-    "aos": "^2.3.4"
+    "aos": "^2.3.4",
+    "dotenv": "^17.2.3",
+    "ftp-deploy": "^2.4.7"
   }
 }
