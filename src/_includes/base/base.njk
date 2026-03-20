@@ -3,30 +3,96 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
-  <link rel="manifest" href="/assets/site.webmanifest">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Title -->
+  <title>
+    {% if title %}
+    {{ title }} | {{ site.title }}
+    {% else %}
+    {{ site.title }}
+    {% endif %}
+  </title>
+
+  <!-- Primary Meta -->
+  <meta name="description" content="{{ description or site.description }}">
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ title or site.title }}">
+  <meta property="og:description" content="{{ description or site.description }}">
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+  {% if site.image %}
+  <meta property="og:image" content="{{ site.url }}{{ site.image }}">
+  {% endif %}
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ title or site.title }}">
+  <meta name="twitter:description" content="{{ description or site.description }}">
+  {% if site.image %}
+  <meta name="twitter:image" content="{{ site.url }}{{ site.image }}">
+  {% endif %}
+
+  <!-- Performance -->
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+
+  <!-- Icons -->
+  <link rel="icon" href="/assets/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="/css/bundle.css">
-  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
-  <title>{{ title or site.title }}</title>
-  <meta name="description" content="{{ description or site.description | safe }}">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "{{ site.schemaType or 'LocalBusiness' }}",
+  "name": "{{ site.title }}",
+  "url": "{{ site.url }}",
+  "description": "{{ site.description }}"
+  {% if site.logo %},
+  "logo": "{{ site.url }}{{ site.logo }}"
+  {% endif %}
+  {% if site.image %},
+  "image": "{{ site.url }}{{ site.image }}"
+  {% endif %}
+  {% if site.phone %},
+  "telephone": "{{ site.phone }}"
+  {% endif %}
+  {% if site.email %},
+  "email": "{{ site.email }}"
+  {% endif %}
+  {% if site.social and site.social | length %},
+  "sameAs": [
+    {% for key, value in site.social %}
+      "{{ value }}"{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+  {% endif %}
+}
+  </script>
+
 </head>
 
-<body class="font-outfit">
+<body>
+
+  <a href="#main-content" class="sr-only focus:not-sr-only">
+    Skip to content
+  </a>
+
   {% include "header/header.njk" %}
-  {{ content | safe }}
+
+  <main id="main-content">
+    {{- content | safe }}
+  </main>
+
   {% include "footer/footer.njk" %}
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="js/script.js" defer></script>
-  <script>
-    AOS.init({
-      duration: 800,
-      easing: 'ease-in-out',
-      once: true
-    });
-  </script>
 </body>
 
 </html>

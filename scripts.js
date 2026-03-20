@@ -1,7 +1,5 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { rm, existsSync } from 'fs';
-import { exec } from 'child_process';
 import readline from 'readline';
 import dotenv from 'dotenv';
 import FtpDeploy from 'ftp-deploy';
@@ -10,9 +8,9 @@ dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const distPath = path.join(__dirname, 'dist');
 
 const env = process.argv[2] === 'prod' ? 'prod' : 'dev';
+const distPath = path.join(__dirname, `dist-${env}`);
 const FTP_HOST = env === 'prod' ? process.env.FTP_HOST_PROD : process.env.FTP_HOST_DEV;
 const requiredEnv = ['FTP_USERNAME', 'FTP_PASSWORD', 'REMOTE_ROOT'];
 const missingEnv = requiredEnv.filter((key) => !process.env[key]);
@@ -37,29 +35,6 @@ async function confirmProd() {
         rl.question('⚠️ You are about to deploy to PROD. Are you sure? (yes/no): ', (answer) => {
             rl.close();
             resolve(answer.trim().toLowerCase() === 'yes');
-        });
-    });
-}
-
-function cleanDist() {
-    return new Promise((resolve, reject) => {
-        if (!existsSync(distPath)) return resolve();
-        rm(distPath, { recursive: true, force: true }, (err) => {
-            if (err) return reject(err);
-            console.log('🧹 /dist folder cleaned');
-            resolve();
-        });
-    });
-}
-
-function buildSite() {
-    return new Promise((resolve, reject) => {
-        console.log('📦 Running npm run build...');
-        exec('npm run build', (err, stdout, stderr) => {
-            if (err) return reject(err);
-            console.log(stdout);
-            if (stderr) console.error(stderr);
-            resolve();
         });
     });
 }
@@ -89,8 +64,6 @@ function deploySite() {
             console.log('❌ Deployment cancelled.');
             process.exit(0);
         }
-        await cleanDist();
-        await buildSite();
         await deploySite();
     } catch (err) {
         console.error('❌ Error during deploy:', err);

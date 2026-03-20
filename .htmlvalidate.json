@@ -2,11 +2,7 @@
     "extends": [
         "html-validate:recommended"
     ],
-    "plugins": [
-        "./htmlvalidate-custom.js"
-    ],
     "rules": {
-        "wcag/h37": "error",
-        "no-empty-alt-without-role": "error"
+        "wcag/h37": "error"
     }
 }

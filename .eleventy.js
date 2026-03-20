@@ -4,32 +4,58 @@ import path from "path";
 
 export default function (eleventyConfig) {
 
-    eleventyConfig.on("eleventy.before", async () => {
-        const inputDir = "src/assets/images";
-        const outputDir = "dist/assets/images";
+    // Environment check
+    const env = process.env.NODE_ENV;
+    const isLocal = env === "local";
+    const isDev = env === "development";
+    const isProd = env === "production";
 
-        if (!fs.existsSync(outputDir)) {
-            fs.mkdirSync(outputDir, { recursive: true });
-        }
+    const outputDir = isProd ? "dist-prod" : isDev ? "dist-dev" : "dist";
 
-        const files = fs.readdirSync(inputDir);
+    eleventyConfig.addFilter("lastModifiedDate", function (filePath) {
+        const stats = fs.statSync(filePath);
+        return stats.mtime.toISOString().split("T")[0];
+    });
 
-        for (const file of files) {
-            if (/\.(jpg|jpeg|png)$/i.test(file)) {
+    eleventyConfig.addLiquidFilter("dateFormat", function (date) {
+        return new Date(date).toISOString().split("T")[0];
+    });
 
-                const inputPath = path.join(inputDir, file);
-                const outputFileName = file.replace(/\.(jpg|jpeg|png)$/i, ".webp");
-                const outputPath = path.join(outputDir, outputFileName);
+    // Image optimisation — skipped for local
+    if (!isLocal) {
+        eleventyConfig.on("eleventy.before", async () => {
+            const inputDir = "src/assets/images";
+            const imagesOutputDir = `${outputDir}/assets/images`;
 
-                if (fs.existsSync(outputPath)) continue;
-
-                await sharp(inputPath)
-                    .webp({ quality: 80 })
-                    .toFile(outputPath);
-
-                console.log(`Optimized: ${file}`);
+            if (!fs.existsSync(imagesOutputDir)) {
+                fs.mkdirSync(imagesOutputDir, { recursive: true });
             }
-        }
+
+            const files = fs.readdirSync(inputDir);
+
+            for (const file of files) {
+                if (/\.(jpg|jpeg|png)$/i.test(file)) {
+
+                    const inputPath = path.join(inputDir, file);
+                    const outputFileName = file.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+                    const outputPath = path.join(imagesOutputDir, outputFileName);
+
+                    if (fs.existsSync(outputPath)) continue;
+
+                    await sharp(inputPath)
+                        .webp({ quality: 80 })
+                        .toFile(outputPath);
+
+                    console.log(`Optimized: ${file}`);
+                }
+            }
+        });
+    }
+
+    eleventyConfig.addCollection("debugUrls", function (collectionApi) {
+        return collectionApi.getAll().map(item => {
+            return item;
+        });
     });
 
     eleventyConfig.addPassthroughCopy("src/css");
@@ -38,7 +64,7 @@ export default function (eleventyConfig) {
     return {
         dir: {
             input: "src",
-            output: "dist",
+            output: outputDir,
         },
     };
 }
