@@ -36,11 +36,25 @@ Builds the site for the customer preview URL. Automatically optimises images to 
 
 Builds the site for the live domain. Automatically optimises images to WebP format and compresses videos. Outputs to `dist-prod`.
 
-### Image & Video Optimisation
+### Image Optimisation
 
-Image and video optimisation runs automatically as part of `build:dev` and `build:prod` — no manual steps required.
+Place source images in `src/assets/images/` as jpg, png, or webp. During build, `@11ty/eleventy-img` automatically generates multiple sizes (400w, 800w, 1200w) and formats (avif, webp, jpeg) — no manual resizing needed. Always supply the largest version of an image you have.
 
-- **Images** — converted and compressed to WebP format using Sharp
+#### Usage
+
+Use the image shortcode instead of a standard <img> tag:
+
+`{% image "src/assets/images/your-image.jpg", "Alt text", "your-tailwind-classes" %}`
+
+Custom sizes can be passed as a fourth argument if needed:
+
+`{% image "src/assets/images/hero.jpg", "Hero", "w-full", { widths: [800, 1200, 1920] } %}`
+
+
+### Video Optimisation
+
+Video optimisation runs automatically as part of `build:dev` and `build:prod` — no manual steps required.
+
 - **Videos** — compressed using ffmpeg with H.264 encoding
 
 Optimisation is skipped on local builds to keep development fast.
