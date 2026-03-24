@@ -7,11 +7,7 @@
 
   <!-- Title -->
   <title>
-    {% if title %}
-    {{ title }} | {{ site.title }}
-    {% else %}
-    {{ site.title }}
-    {% endif %}
+    {%- if title %}{{ title }} | {{ site.title }}{%- else %}{{ site.title }}{%- endif %}
   </title>
 
   <!-- Primary Meta -->
@@ -23,17 +19,17 @@
   <meta property="og:title" content="{{ title or site.title }}">
   <meta property="og:description" content="{{ description or site.description }}">
   <meta property="og:url" content="{{ site.url }}{{ page.url }}">
-  {% if site.image %}
+  {%- if site.image %}
   <meta property="og:image" content="{{ site.url }}{{ site.image }}">
-  {% endif %}
+  {%- endif %}
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ title or site.title }}">
   <meta name="twitter:description" content="{{ description or site.description }}">
-  {% if site.image %}
+  {%- if site.image %}
   <meta name="twitter:image" content="{{ site.url }}{{ site.image }}">
-  {% endif %}
+  {%- endif %}
 
   <!-- Performance -->
   <link rel="preconnect" href="https://unpkg.com" crossorigin>
@@ -55,25 +51,25 @@
   "name": "{{ site.title }}",
   "url": "{{ site.url }}",
   "description": "{{ site.description }}"
-  {% if site.logo %},
+  {%- if site.logo %},
   "logo": "{{ site.url }}{{ site.logo }}"
-  {% endif %}
-  {% if site.image %},
+  {%- endif %}
+  {%- if site.image %},
   "image": "{{ site.url }}{{ site.image }}"
-  {% endif %}
-  {% if site.phone %},
+  {%- endif %}
+  {%- if site.phone %},
   "telephone": "{{ site.phone }}"
-  {% endif %}
-  {% if site.email %},
+  {%- endif %}
+  {%- if site.email %},
   "email": "{{ site.email }}"
-  {% endif %}
-  {% if site.social and site.social | length %},
+  {%- endif %}
+  {%- if site.social and site.social | length %},
   "sameAs": [
-    {% for key, value in site.social %}
+    {%- for key, value in site.social %}
       "{{ value }}"{% if not loop.last %},{% endif %}
-    {% endfor %}
+    {%- endfor %}
   ]
-  {% endif %}
+  {%- endif %}
 }
   </script>
 
