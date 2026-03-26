@@ -8,10 +8,6 @@
         "url": "/page-one/"
     },
     {
-        "label": "Link Two",
-        "url": "/page-two/"
-    },
-    {
         "label": "Contact",
         "url": "/contact/",
         "type": "cta"
