@@ -4,15 +4,16 @@ import path from "path";
 
 export default function (eleventyConfig) {
 
-    // Environment check
-    const env = process.env.NODE_ENV;
-    const isLocal = env === "local";
-    const isDev = env === "development";
-    const isProd = env === "production";
+    const isProd = process.env.CF_PAGES_BRANCH === 'main';
+    const baseUrl = isProd
+        ? 'https://clientdomain.com'
+        : process.env.CF_PAGES_URL || 'http://localhost:8080';
 
-    const outputDir = isProd ? "dist-prod" : isDev ? "dist-dev" : "dist";
+    const outputDir = "dist";
 
-    // Image shortcode
+    eleventyConfig.addGlobalData("baseUrl", baseUrl);
+    eleventyConfig.addGlobalData("isProd", isProd);
+
     eleventyConfig.addShortcode('image', async function (src, alt, cls, options = {}) {
         const {
             widths = [400, 800, 1200],

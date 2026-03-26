@@ -1,17 +1,10 @@
-import dotenv from "dotenv";
-dotenv.config();
-
-const env = process.env.NODE_ENV;
-
 export default {
   title: "Template",
   description: "Website Description",
   schemaType: "LocalBusiness",
-  url: env === "production"
+  url: process.env.CF_PAGES_BRANCH === 'main'
     ? "PROD URL"
-    : env === "development"
-      ? "https://whitesmoke-ant-912302.hostingersite.com"
-      : "http://localhost:8080",
+    : process.env.CF_PAGES_URL || "http://localhost:8080",
   logo: "",
   image: "SEO Preview Image Card (1200 x 675 pixels)",
   phone: "+44 000 000 000",
